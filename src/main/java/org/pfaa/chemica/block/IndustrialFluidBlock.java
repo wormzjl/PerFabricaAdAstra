@@ -130,7 +130,16 @@ public class IndustrialFluidBlock extends BlockFluidClassic {
 	@Override
     public void updateTick(World world, int x, int y, int z, Random rand)
     {
-
+		// TODO: super-heated blocks should add sound and particle effects, like BlocksLiquid.func_149799_m()
+		if (this.getFluid().isGaseous()) {
+			this.updateGas(world, x, y, z, rand);
+		} else {
+		    if (this.fluid.isPollutant()) {
+		        this.polluteSoil(world, x, y, z, rand);
+		    }
+		    this.tryToCatchFireFromLava(world, x, y, z, rand);
+			super.updateTick(world, x, y, z, rand);
+		}
     }
     
 	private void tryToChangePhase(World world, int x, int y, int z, Random rand) {
