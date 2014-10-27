@@ -134,10 +134,6 @@ public class IndustrialFluidBlock extends BlockFluidClassic {
 		if (this.getFluid().isGaseous()) {
 			this.updateGas(world, x, y, z, rand);
 		} else {
-		    if (this.fluid.isPollutant()) {
-		        this.polluteSoil(world, x, y, z, rand);
-		    }
-		    this.tryToCatchFireFromLava(world, x, y, z, rand);
 			super.updateTick(world, x, y, z, rand);
 		}
     }
