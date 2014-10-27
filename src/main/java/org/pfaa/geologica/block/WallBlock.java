@@ -9,10 +9,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 import org.pfaa.block.CompositeBlock;
 import org.pfaa.block.CompositeBlockAccessors;
 import org.pfaa.geologica.GeologicaBlocks;
+import org.pfaa.geologica.client.registration.ClientRegistrant;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -73,4 +75,41 @@ public class WallBlock extends BlockWall implements CompositeBlockAccessors, Pro
 		return modelBlock;
 	}
 
+	@Override
+	public boolean canRenderInPass(int pass) {
+		return modelBlock.canRenderInPass(pass);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int getRenderBlockPass() {
+		return modelBlock.getRenderBlockPass();
+	}
+
+	/* Overriding this will break:
+	 * * Triggering the block underneath when the entity walks up to or falls off the wall
+	 * * Entities path finding around the wall
+	 * 
+	 * We could return the wall render ID when there is no renderer (we are on the server).
+	 * However, this does not solve the problem for single player.
+	 */
+	@Override
+	public int getRenderType() {
+		//if (this.renderAsWall) {
+			return super.getRenderType();
+		//} else {
+		//	return ClientRegistrant.compositeWallBlockRenderer.getRenderId();
+		//}
+	}
+
+	@Override
+	public boolean canPlaceTorchOnTop(World world, int x, int y, int z) {
+		return true;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int colorMultiplier(int meta) {
+		return modelBlock.colorMultiplier(meta);
+	}
 }
